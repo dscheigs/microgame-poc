@@ -5,6 +5,7 @@ import ProgressTracker from "./ProgressTracker";
 import SkipButton from "./SkipButton";
 import ResultsScreen from "./ResultsScreen";
 import ColorMatch from "./microgames/ColorMatch";
+import SequenceMemory from "./microgames/SequenceMemory";
 
 const GameContainer: React.FC = () => {
   const [state, setState] = useState<GameContainerState>({
@@ -135,6 +136,19 @@ const GameContainer: React.FC = () => {
     };
   }, [skipButtonTimer]);
 
+  const renderCurrentMicrogame = () => {
+    const games = [ColorMatch, SequenceMemory, ColorMatch, SequenceMemory, ColorMatch];
+    const CurrentGame = games[state.currentLevel - 1];
+    
+    return (
+      <CurrentGame
+        key={state.currentLevel}
+        onComplete={handleLevelComplete}
+        level={state.currentLevel}
+      />
+    );
+  };
+
   if (state.gameState === "idle") {
     return (
       <div style={{ textAlign: "center", padding: "2rem" }}>
@@ -190,11 +204,7 @@ const GameContainer: React.FC = () => {
       </div>
 
       <div style={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
-        <ColorMatch
-          key={state.currentLevel}
-          onComplete={handleLevelComplete}
-          level={state.currentLevel}
-        />
+        {renderCurrentMicrogame()}
       </div>
 
       <SkipButton onSkip={handleSkip} visible={state.showSkipButton} />
