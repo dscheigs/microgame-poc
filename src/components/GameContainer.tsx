@@ -4,6 +4,7 @@ import Timer from "./Timer";
 import ProgressTracker from "./ProgressTracker";
 import SkipButton from "./SkipButton";
 import ResultsScreen from "./ResultsScreen";
+import ColorMatch from "./microgames/ColorMatch";
 
 const GameContainer: React.FC = () => {
   const [state, setState] = useState<GameContainerState>({
@@ -165,7 +166,12 @@ const GameContainer: React.FC = () => {
   }
 
   return (
-    <div style={{ padding: "1rem" }}>
+    <div style={{ 
+      padding: "1rem", 
+      height: "100vh", 
+      display: "flex", 
+      flexDirection: "column" 
+    }}>
       <div
         style={{
           display: "flex",
@@ -183,20 +189,12 @@ const GameContainer: React.FC = () => {
         />
       </div>
 
-      <div style={{ textAlign: "center", marginBottom: "2rem" }}>
-        <h2>Level {state.currentLevel}/5</h2>
-        <p>Microgame placeholder - Complete the puzzle!</p>
-        <button
-          onClick={handleLevelComplete}
-          style={{
-            fontSize: "1rem",
-            padding: "0.5rem 1rem",
-            minWidth: "44px",
-            minHeight: "44px",
-          }}
-        >
-          Complete Level (Temp)
-        </button>
+      <div style={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
+        <ColorMatch
+          key={state.currentLevel}
+          onComplete={handleLevelComplete}
+          level={state.currentLevel}
+        />
       </div>
 
       <SkipButton onSkip={handleSkip} visible={state.showSkipButton} />
