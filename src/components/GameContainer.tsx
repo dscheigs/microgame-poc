@@ -8,6 +8,7 @@ import ColorMatch from "./microgames/ColorMatch";
 import SequenceMemory from "./microgames/SequenceMemory";
 import SpeedTap from "./microgames/SpeedTap";
 import DirectionMatch from "./microgames/DirectionMatch";
+import OddOneOut from "./microgames/OddOneOut";
 
 const GameContainer: React.FC = () => {
   const [state, setState] = useState<GameContainerState>({
@@ -49,24 +50,40 @@ const GameContainer: React.FC = () => {
     setSkipButtonTimer(timer);
   };
 
-  const handleLevelComplete = (): void => {
+  const handleLevelComplete = (skipCurrentLevelResult: boolean = false): void => {
     const now = Date.now();
     const timeSpent = state.startTime ? now - state.startTime : 0;
 
     const newLevelResults = [...state.levelResults];
-    newLevelResults[state.currentLevel - 1] = {
-      completed: true,
-      skipped: false,
-      timeSpent,
-    };
+    
+    // Only update level result if not skipping (to preserve skip status)
+    if (!skipCurrentLevelResult) {
+      newLevelResults[state.currentLevel - 1] = {
+        completed: true,
+        skipped: false,
+        timeSpent,
+      };
+    }
 
     if (state.currentLevel >= 5) {
-      endGame();
+      // Update final level result and end game in one state update
+      const now = Date.now();
+      const finalTime = state.startTime ? (now - state.startTime) + state.totalTime : state.totalTime;
+      
+      if (skipButtonTimer) clearTimeout(skipButtonTimer);
+      
+      setState((prev) => ({
+        ...prev,
+        levelResults: skipCurrentLevelResult ? prev.levelResults : newLevelResults,
+        gameState: "completed",
+        totalTime: finalTime,
+        showSkipButton: false,
+      }));
     } else {
       setState((prev) => ({
         ...prev,
         currentLevel: prev.currentLevel + 1,
-        levelResults: newLevelResults,
+        levelResults: skipCurrentLevelResult ? prev.levelResults : newLevelResults,
         showSkipButton: false,
       }));
 
@@ -96,7 +113,7 @@ const GameContainer: React.FC = () => {
       levelResults: newLevelResults,
     }));
 
-    handleLevelComplete();
+    handleLevelComplete(true);
   };
 
   const endGame = (): void => {
@@ -139,7 +156,7 @@ const GameContainer: React.FC = () => {
   }, [skipButtonTimer]);
 
   const renderCurrentMicrogame = () => {
-    const games = [ColorMatch, SequenceMemory, SpeedTap, DirectionMatch, SequenceMemory];
+    const games = [ColorMatch, SequenceMemory, SpeedTap, DirectionMatch, OddOneOut];
     const CurrentGame = games[state.currentLevel - 1];
     
     return (
