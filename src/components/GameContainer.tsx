@@ -7,6 +7,7 @@ import ResultsScreen from "./ResultsScreen";
 import ColorMatch from "./microgames/ColorMatch";
 import SequenceMemory from "./microgames/SequenceMemory";
 import SpeedTap from "./microgames/SpeedTap";
+import DirectionMatch from "./microgames/DirectionMatch";
 
 const GameContainer: React.FC = () => {
   const [state, setState] = useState<GameContainerState>({
@@ -138,7 +139,7 @@ const GameContainer: React.FC = () => {
   }, [skipButtonTimer]);
 
   const renderCurrentMicrogame = () => {
-    const games = [ColorMatch, SequenceMemory, SpeedTap, ColorMatch, SequenceMemory];
+    const games = [ColorMatch, SequenceMemory, SpeedTap, DirectionMatch, SequenceMemory];
     const CurrentGame = games[state.currentLevel - 1];
     
     return (

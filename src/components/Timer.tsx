@@ -34,7 +34,8 @@ const Timer: React.FC<TimerProps> = ({ startTime, additionalTime }) => {
       fontFamily: 'monospace',
       padding: '0.5rem',
       backgroundColor: '#f0f0f0',
-      borderRadius: '4px'
+      borderRadius: '4px',
+      color: '#333'
     }}>
       {formatTime(displayTime)}
     </div>

@@ -79,7 +79,8 @@ const ResultsScreen: React.FC<ResultsScreenProps> = ({ totalTime, levelResults, 
                 padding: '0.5rem',
                 backgroundColor: '#f5f5f5',
                 borderRadius: '4px',
-                borderLeft: `4px solid ${result.completed ? '#4CAF50' : result.skipped ? '#FF9800' : '#E0E0E0'}`
+                borderLeft: `4px solid ${result.completed ? '#4CAF50' : result.skipped ? '#FF9800' : '#E0E0E0'}`,
+                color: '#333'
               }}
             >
               <span>Level {index + 1}</span>
